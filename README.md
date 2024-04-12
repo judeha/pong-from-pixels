@@ -47,6 +47,6 @@ C_t = \text{sum of gradient squared}_t = (1 - \rho) * \text{gradient} + \rho * \
 Intuition: AdaGrad is slow because the squared terms blow up fast and increase computation time. RMSProp is basically AdaGrad, but faster, because it keeps the squared term using the $`\rho`$ decay rate. The smaller $`\rho`$ is (usually between 0 and 1), the faster, although you trade off the momentum effect. The original pong from pixels code uses RMSProp, which uses a cache to store previous second moment/sum of gradient squared information.
 
 <p align="center">
-  <img src="assets/images/exp1.png" width="350" title="Experiment 1">
+  <img src="assets/images/exp2.png" width="350" title="Experiment 1">
   <!-- <img src="your_relative_path_here_number_2_large_name" width="350" alt="accessibility text"> -->
 </p>
