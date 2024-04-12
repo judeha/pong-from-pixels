@@ -46,7 +46,56 @@ C_t = \text{sum of gradient squared}_t = (1 - \rho) * \text{gradient} + \rho * \
 
 Intuition: AdaGrad is slow because the squared terms blow up fast and increase computation time. RMSProp is basically AdaGrad, but faster, because it keeps the squared term using the $`\rho`$ decay rate. The smaller $`\rho`$ is (usually between 0 and 1), the faster, although you trade off the momentum effect. The original pong from pixels code uses RMSProp, which uses a cache to store previous second moment/sum of gradient squared information.
 
+### 5. Adam
+Typically $`\beta_1 = 0.9$, $\beta_2 = 0.99`$
+```math
+M_t = \beta_1 * M_{t-1} + (1 - \beta_1) * \text{gradient}
+C_t = \beta_2 * C_{t-1} + (1 - \beta_2) * \text{gradient}
+\Delta = -\gamma * \frac{M}{\sqrt{C}}
+```
+
+Intuition: Adam optimizers are typically what we use today with Pytorch or Tensorflow. Adam combines the speed of momentum ($`M_t = \text{sum of gradient}`$) with the ability of AdaGrad/RMSProp to adapt and change directions ($`C_t = \text{sum of gradient squared}`$). There are some pockets of StackOverflow/the Internet where people seem to prefer RMSProp for applications like reinforcement learning with non-stationary distributions, but I didn't look too closely into this.
+
+Note: On illustration $e$ of Adam optimization in the TDS blog, note that dividing momentum $`M`$ by sum of squares $`C`$ has the effect of almost normalizing the magnitude of momentum.
+
+## Implementing RMSProp and Adam in Python
+
+I ran a few different experiments for this one; here's a quick summary:
+- Experiment 1: Tried running Karpathy's code as originally written with one tiny modification. Convergence was pretty slow, because of the one tiny modification I made (obviously). I kept resetting the momentum buffers in addition to the gradient buffer at the end of each episode, which is silly because the whole point is that it's supposed to record historical momentum.
+- Experiment 2: Stopped resetting the buffers, but reward suddenly kept getting WORSE and converging to worst possible reward of -21. This one stumped me for so long until I asked someone for help and realized that unlike most ML problems, you're trying to maximize reward instead of minimizing loss. I was correctly finding the gradient to maximize reward each time, but updating in the complete opposite direction by running
+```python
+  model[k] -= learning_rate * m_hat / (np.sqrt(c_hat) + epsilon)
+```
+Instead, I should have been running
+```python
+  model[k] += learning_rate * m_hat / (np.sqrt(c_hat) + epsilon)
+```
+- Experiment 3: I fixed the model update and reward started increasing using RMSProp. It was really, really slow, so halfway through I started searching up things like "gradient descent so slow why," at which point I realized there were different gradient optimization algorithms and started writing this blog.
+- Experiment 4: After doing some reading, I implemented Adam optimization from scratch, which is pretty simple for a single step:
+```python
+  # Momentum buffer
+  m[k] = b1 * m[k] + (1 - b1) * g
+  # Squared momentum buffer
+  c[k] = b2 * c[k] + (1 - b2) * g**2
+
+  # Buffer updates
+  m_hat = m[k] / (1 - b1**episode_number)
+  c_hat = c[k] / (1 - b2**episode_number)
+
+  # Update model
+  model[k] += learning_rate * m_hat / (np.sqrt(c_hat) + epsilon)
+
+  # Reset gradient buffer only
+  gradient_buffer[k] = np.zeros_like(v)
+```
+Instead of one RMSProp cache for momentum, I keep two caches, one for momentum ($`m`$) and one for sum of squared gradients ($`c`$). Then I run this all locally on my computer, which really hates me at this point, and think to myself "hey, I should learn how to use SageMaker." But I don't, because sometimes it's a Friday and you just want to have a good time playing beach volleyball instead of languishing in CS student self-loathing. Luckily, Adam converges much faster (see Tensorboard plots below). After about 3,000 episodes and 3 hours, I end up with an agent that is slightly better than the computer. After about 8,000 episodes and 8 hours, I my agent plateaus at an average +10 reward each game. This is a pretty fast compared to previous pong-from-pixels [blogs](https://www.storminthecastle.com/posts/pong_from_pixels/) I came across - maybe because hardware has sped up a lot in the last few years, maybe because I'm using Adam. I'd like to think it's me, so we're going to go with that.
+
 <p align="center">
   <img src="assets/images/exp2.png" width="350" title="Experiment 1">
   <!-- <img src="your_relative_path_here_number_2_large_name" width="350" alt="accessibility text"> -->
 </p>
+
+| | |
+|:-------------------------:|:-------------------------:|
+|<img width="1604" alt="" src="assets/images/exp1.png">  CAPTION 1 |  <img width="1604" alt="" src="assets/images/exp2.png"> CAPTION 2 |
+|<img width="1604" alt="" src="assets/images/exp3.png"> CAPTION 3 |  <img width="1604" alt="" src="assets/images/exp4.png">|
