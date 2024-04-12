@@ -98,7 +98,7 @@ Instead of one RMSProp cache for momentum, I keep two caches, one for momentum (
 | | |
 |:-------------------------:|:-------------------------:|
 |<img width="1604" alt="" src="assets/images/exp1.png">  exp1: slow convergence due to resetting momentum buffers, killed after 450 episodes |  <img width="1604" alt="" src="assets/images/exp2.png"> exp2: converges to worst case because updates are set in the wrong direction of objective, killed after 550 episodes |
-|<img width="1604" alt="" src="assets/images/exp3.png"> exp3: very slow (in my opinion) initial convergence using RMSProp, killed after 750 episodes out of boredom |  <img width="1604" alt="" src="assets/images/exp4.png"> exp4: faster initial convergence with Adam, killed after plateauing around 9000 episodes due to being emotionally done |
+|<img width="1604" alt="" src="assets/images/exp3.png"> exp3: very slow (in my opinion) initial convergence using RMSProp, killed after 750 episodes out of boredom |  <img width="1604" alt="" src="assets/images/exp4.png"> exp4: faster initial convergence with Adam, killed after plateauing around 9000 episodes due to emotional doneness |
 
 Figure 1: Tensorboard-logged average reward (-21 minimum, +21 maximum) over episodes for all four experiments
 
