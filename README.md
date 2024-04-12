@@ -88,19 +88,21 @@ Instead, I should have been running
   # Reset gradient buffer only
   gradient_buffer[k] = np.zeros_like(v)
 ```
-Instead of one RMSProp cache for momentum, I keep two caches, one for momentum ($`m`$) and one for sum of squared gradients ($`c`$). Then I run this all locally on my computer, which really hates me at this point, and think to myself "hey, I should learn how to use SageMaker." But I don't, because sometimes it's a Friday and you just want to have a good time playing beach volleyball instead of languishing in CS student self-loathing. Luckily, Adam converges much faster (see Tensorboard plots below). After about 3,000 episodes and 3 hours, the agent is **slightly better** than the computer. After about 8,000 episodes and 8 hours, the agent plateaus at an **average +10 reward** each game. This is a pretty fast compared to previous pong-from-pixels [blogs](https://www.storminthecastle.com/posts/pong_from_pixels/) I came across - maybe because hardware has sped up since then, maybe because it's using Adam. I'd like to think it's the second, so we're going to go with that.
+Instead of one RMSProp cache for momentum, I keep two caches, one for momentum ($`m`$) and one for sum of squared gradients ($`c`$). Then I run this all locally on my computer, which really hates me at this point, and think to myself "hey, I should learn how to use SageMaker." But I don't, because sometimes it's a Friday and you just want to have a good time playing beach volleyball instead of languishing in CS student self-loathing. Luckily, Adam converges much faster (see Tensorboard plots below).
 
 <!-- <p align="center">
   <img src="assets/images/exp2.png" width="350" title="Experiment 1">
   <!-- <img src="your_relative_path_here_number_2_large_name" width="350" alt="accessibility text"> -->
-<!-- </p> --> -->
+<!-- </p> -->
 
 | | |
 |:-------------------------:|:-------------------------:|
-|<img width="1604" alt="" src="assets/images/exp1.png">  exp1: slow convergence due to resetting momentum buffers, killed after 450 episodes |  <img width="1604" alt="" src="assets/images/exp2.png"> exp2: converges to worst case scenario because updates are set in the wrong direction of objective, killed after 550 episodes |
-|<img width="1604" alt="" src="assets/images/exp3.png"> exp3: very slow (in my opinion) initial convergence using RMSProp, killed after 750 episodes out of boredom |  <img width="1604" alt="" src="assets/images/exp4.png"> exp4: much faster initial convergence with Adam, killed after plateauing around 9000 episodes due to being emotionally done with this project |
+|<img width="1604" alt="" src="assets/images/exp1.png">  exp1: slow convergence due to resetting momentum buffers, killed after 450 episodes |  <img width="1604" alt="" src="assets/images/exp2.png"> exp2: converges to worst case because updates are set in the wrong direction of objective, killed after 550 episodes |
+|<img width="1604" alt="" src="assets/images/exp3.png"> exp3: very slow (in my opinion) initial convergence using RMSProp, killed after 750 episodes out of boredom |  <img width="1604" alt="" src="assets/images/exp4.png"> exp4: faster initial convergence with Adam, killed after plateauing around 9000 episodes due to being emotionally done |
 
 Figure 1: Tensorboard-logged average reward (-21 minimum, +21 maximum) over episodes for all four experiments
+
+After about 3,000 episodes and 3 hours, the agent is **slightly better** than the computer. After about 8,000 episodes and 8 hours, the agent plateaus at an **average +10 reward** each game. This is a pretty fast compared to previous pong-from-pixels [blogs](https://www.storminthecastle.com/posts/pong_from_pixels/) I came across - maybe because hardware has sped up since then, maybe because it's using Adam. I'd like to think it's the second, so we're going to go with that.
 
 | | |
 |:-------------------------:|:-------------------------:|
