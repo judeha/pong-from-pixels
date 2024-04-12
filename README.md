@@ -14,7 +14,7 @@ I liked this [blog post](https://towardsdatascience.com/a-visual-explanation-of-
 
 ### 1. Vanilla gradient descent
 ```math
-\Delta = -$\gamma$ * \text{gradient}
+\Delta = -\gamma * \text{gradient}
 ```
 
 Reminder: the gradient is computed in backprop, where $`L=y-\hat{y}`$. We take the derivative of loss respective to $`\hat{y}`$, which is a series of functions $`f_1(f_2(...(x)))`$, where each $`f`$ is a layer of the neural network. Rather than calculating the gradient analytically, we calculate it empirically (with the actual values of the weights). A gradient of 4 for $`w`$ tells us that increasing the weight will increase the loss by a rate of 4 in the current formulation.
@@ -47,6 +47,6 @@ C_t = \text{sum of gradient squared}_t = (1 - \rho) * \text{gradient} + \rho * \
 Intuition: AdaGrad is slow because the squared terms blow up fast and increase computation time. RMSProp is basically AdaGrad, but faster, because it keeps the squared term using the $`\rho`$ decay rate. The smaller $`\rho`$ is (usually between 0 and 1), the faster, although you trade off the momentum effect. The original pong from pixels code uses RMSProp, which uses a cache to store previous second moment/sum of gradient squared information.
 
 <p align="center">
-  <img src="assets/exp1.png" width="350" title="Experiment 1">
+  <img src="assets/images/exp1.png" width="350" title="Experiment 1">
   <!-- <img src="your_relative_path_here_number_2_large_name" width="350" alt="accessibility text"> -->
 </p>
