@@ -95,6 +95,8 @@ Instead of one RMSProp cache for momentum, I keep two caches, one for momentum (
   <!-- <img src="your_relative_path_here_number_2_large_name" width="350" alt="accessibility text"> -->
 <!-- </p> -->
 
+## Results
+
 | | |
 |:-------------------------:|:-------------------------:|
 |<img width="1604" alt="" src="assets/images/exp1.png">  exp1: slow convergence due to resetting momentum buffers, killed after 450 episodes |  <img width="1604" alt="" src="assets/images/exp2.png"> exp2: converges to worst case because updates are set in the wrong direction of objective, killed after 550 episodes |
