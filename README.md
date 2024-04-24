@@ -46,7 +46,8 @@ Intuition: AdaGrad takes the idea of momentum and then squares the sum of past g
 
 ### 4. RMSProp
 ```math
-C_t = \text{sum of gradient squared}_t = (1 - \rho) * \text{gradient} + \rho * \text{sum of gradient squared}```
+C_t = \text{sum of gradient squared}_t = (1 - \rho) * \text{gradient} + \rho * \text{sum of gradient squared}
+```
 ```math
 \Delta_t = -\gamma * \frac{\text{gradient}}{\sqrt{C_t}}
 ```
