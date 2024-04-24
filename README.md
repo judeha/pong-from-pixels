@@ -23,10 +23,8 @@ Intuition: The blog explains normal gradient descent “like using a flashlight 
 
 ### 2. Momentum
 ```math
-M_t = \text{sum of gradient}_t = \text{gradient} + \rho * \text{sum of gradient}_{t-1}
-
-\Delta = -\gamma * M
-
+M_t = \text{sum of gradient}_t = \text{gradient} + \rho * \text{sum of gradient}_{t-1}\\
+\Delta = -\gamma * M\\
 \Delta = -\gamma * \text{gradient} + \rho * \Delta_{t-1}
 ```
 
@@ -34,8 +32,7 @@ Intuition: This is very similar to vanilla gradient descent, except now my $`\De
 
 ### 3. AdaGrad
 ```math
-M'_t = \text{sum of gradient squared}_t = \text{gradient}^2 + \text{sum of gradient}_{t-1}
-
+M'_t = \text{sum of gradient squared}_t = \text{gradient}^2 + \text{sum of gradient}_{t-1}\\
 \Delta = -\gamma * \frac{\text{gradient}}{\sqrt{M'}}
 ```
 
@@ -43,19 +40,17 @@ Intuition: AdaGrad takes the idea of momentum and then squares the sum of past g
 
 ### 4. RMSProp
 ```math
-C_t = \text{sum of gradient squared}_t = (1 - \rho) * \text{gradient} + \rho * \text{sum of gradient squared}
+C_t = \text{sum of gradient squared}_t = (1 - \rho) * \text{gradient} + \rho * \text{sum of gradient squared}\\
 \Delta_t = -\gamma * \frac{\text{gradient}}{\sqrt{C_t}}
 ```
 
 Intuition: AdaGrad is slow because the squared terms blow up fast and increase computation time. RMSProp is basically AdaGrad, but faster, because it keeps the squared term using the $`\rho`$ decay rate. The smaller $`\rho`$ is (usually between 0 and 1), the faster, although you trade off the momentum effect. The original pong from pixels code uses RMSProp, which uses a cache to store previous second moment/sum of gradient squared information.
 
 ### 5. Adam
-Typically $`\beta_1 = 0.9'$, $'\beta_2 = 0.99`$
+Typically $`\beta_1 = 0.9`$, $`\beta_2 = 0.99`$
 ```math
-M_t = \beta_1 * M_{t-1} + (1 - \beta_1) * \text{gradient}
-
-C_t = \beta_2 * C_{t-1} + (1 - \beta_2) * \text{gradient}
-
+M_t = \beta_1 * M_{t-1} + (1 - \beta_1) * \text{gradient}\\
+C_t = \beta_2 * C_{t-1} + (1 - \beta_2) * \text{gradient}\\
 \Delta = -\gamma * \frac{M}{\sqrt{C}}
 ```
 
